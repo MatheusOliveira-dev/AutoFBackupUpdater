@@ -1,10 +1,41 @@
-2.1.0 (31/03/2023)
+3.0.0 (19/09/2023)
 
 ## Adições
 
-- Migrado a forma de comunicação com o Telegram. A partir dessa versão, é utilizado o pacote Telegram.Bot;
+# Nova Tipo de Rotina: Replicação de Dados
+
+- Nas novas versões do Firebird (>= 4.0) foi implementado o recurso de Replicação de Dados Nativa. Em virtude disso, o AutoFBackup foi refatorado para atender a necessidade da implementação própria do transporte dos arquivos de replicação de dados já prontos, do Servidor Local para o Servidor de Destino Remoto, conforme o Firebird exige. Através deste novo tipo de rotina, é possível então: 
+
+### Especificar de quanto em quanto em quanto tempo a verificação de novos arquivos de Replicação de Dados já prontos para o envio do Servidor Local para o Servidor de Destino Remoto deve ocorrer ocorrer, e se houverem arquivos, enviá-los para o Servidor de Destino Remoto.
+
+### Especificar qual diretório monitorar do Servidor Local, onde os arquivos de Replicação de Dados já prontos para serem enviados para o Servidor de Destino Remoto estão
+- Através do arquivo de configuração de Replicação de Dados do Firebird (versões >= 4.0), onde é possível especificar em qual diretório do Servidor Local os arquivos de Replicação de Dados já prontos para serem enviados para o Servidor de Destino Remoto devem ser salvos.
+
+### Especificar o método de transporte dos arquivos de Replicação de Dados já prontos para serem enviados do Servidor Local para o Servidor de Destino Removo, via FTP ou Pasta Compartilhada
+
+### Especificar para qual diretório no Servidor de Destino Remoto os Arquivos de Replicação de Dados já prontos no Servidor Local devem ser enviados
+
+### Especificar o diretório de Logs de Sucesso 
+- Ao obter êxito no transporte dos Arquivos de Replicação já prontos do Servidor Local para o Servidor de Destino, estes serão movidos para o diretório de Logs de Sucesso. 
+- Um arquivo de Log (LogReplicacaoDeDados-uidRotina) será criado junto. Através dele é possível visualizar todos os Arquivos de Replicação transmitidos com sucesso.
+
+### Especificar o diretório de Logs de Erro 
+- Se durante a execução da Rotina o envio de um Arquivo de Replicação de Dados pronto do Servidor Local para o Servidor de Destino falhar, um arquivo de Log (LogErroReplicacaoDeDados-uidRotina) será criado neste diretório. Através dele é possível visualizar o motivo da falha na transmissão.
+ 
+### Realizar o o transporte para o Servidor de Destino Removo via FTP ou em um Diretório Compartilhado para redes internas no Windows
+
+- Realizar o envio de Notificações de Erro e/ou Sucesso (e o arquivo de log junto) por E-mail ou Telegram.
+- Para o uso destas Integrações, exige-se que estejam previamente configuradas, exatamente como na criação de Rotinas de Arquivos de Backup.
+- O envio de Notificações de Sucesso (por E-mail e/ou Telegram) só ocorrerá se a Rotina for concluída sem erros. Isto é: Somente se todos os Arquivos de Replicação de Dados prontos para envio forem transmitidos com sucesso.
+- O envio de Notificações de Erros (por E-mail e/ou Telegram) só ocorrerá se a Rotina for concluída com erros. Isto é: Se na transmissão de um dos Arquivos de Replicação de Dados prontos para envio ocorrer uma falha. Neste momento a Rotina será abortada e a Notificação de Erros, se configurada e habilitada, será executada e enviada.
+
+---
+
+- Implementado Configuração Global para escolha da extensão do Arquivo de Backup (.fbk ou .bck). Esta configuração é mutável, é possível alterá-la na criação da Rotina de Backup;
+
 
 ## Correções
 
-- Erro no Teste de Funcionamento de Upload para o FTP próprio;
-- Refatoração em partes do Código;
+Nada.
+
+(https://github.com/MatheusOliveira-dev/AutoFBackup/commit/4e4733997b2af543c8616036bdde98e400672f88)
